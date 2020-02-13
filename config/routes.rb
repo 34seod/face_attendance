@@ -5,4 +5,7 @@ Rails.application.routes.draw do
   scope module: :api do
     post 'save' => 'save_image#save'
   end
+
+  scope module: :gui do
+  end
 end
