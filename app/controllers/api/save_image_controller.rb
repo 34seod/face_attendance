@@ -3,8 +3,10 @@ module Api
 
     # POST "/save"
     def save
-      File.open("tmp/seo/avc_#{Time.zone.now.strftime("%Y%m%d_%H%M%9N")}.png", 'wb') do |f|
-        f.write(Base64.decode64(base_64_encoded_data))
+      Dir.mktmpdir do |dir|
+        File.open("#{dir}/av.webm", 'wb') { |f| f.write(Base64.decode64(base_64_encoded_data)) }
+        movie = FFMPEG::Movie.new("#{dir}/av.webm")
+        movie.screenshot("./tmp/seo/screenshot_%d.jpg", { vframes: 1000, frame_rate: '12/1' }, validate: false)
       end
       head :no_content
     end
@@ -12,11 +14,11 @@ module Api
     private
 
     def permitted_params
-      params.permit(:img)
+      params.permit(:data)
     end
 
     def base_64_encoded_data
-      permitted_params[:img].split(",").last
+      permitted_params[:data].split(",").last
     end
   end
 end
