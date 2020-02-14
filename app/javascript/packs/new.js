@@ -2,6 +2,10 @@ import { RecordRTCPromisesHandler } from "recordrtc"
 
 // https://github.com/muaz-khan/RecordRTC
 document.addEventListener('DOMContentLoaded', () => {
+    // $("#modalBtn").click(function(){
+    //   $("#exampleModal").modal('show');
+    // });
+
     // Store a reference of the preview video element and a global reference to the recorder instance
     var video = document.getElementById('my-preview');
     var recorder;
@@ -62,11 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 result.data = re
               }).then((re) => {
                 console.log(result)
+                // var formElement = document.getElementById("user-form");
+                // var formData = formElement.getFormData();
                 sendToServer(result)
               })
             })
-
-
 
             // Stop the device streaming
             recorder.stream.stop()
