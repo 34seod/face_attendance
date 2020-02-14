@@ -2,8 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 .button {
-  border: medium;
   width: 200px;
   height: 200px;
-  background-color: rgb(3, 201, 158);
+}
+
+.layer{
+  position: absolute;
+  top: calc(50% - 200px);
+  left: calc(50% - (400px + 0.5rem)/2);
 }

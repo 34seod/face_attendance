@@ -40,3 +40,4 @@ function sendToServer(dataUrl) {
     success: () => {console.log("saved")}
   })
 }
+// https://jsfiddle.net/9b2e1p0t/2/
