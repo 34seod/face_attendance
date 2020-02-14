@@ -14,3 +14,8 @@
  *= require_self
  *= require bootstrap/scss/bootstrap
  */
+
+body {
+  color: #fff !important;
+  background-color: #00222f !important;
+}
