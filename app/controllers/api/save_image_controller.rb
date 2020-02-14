@@ -3,11 +3,17 @@ module Api
 
     # POST "/save"
     def save
+      # DB
+
+      # image
       Dir.mktmpdir do |dir|
         File.open("#{dir}/av.webm", 'wb') { |f| f.write(Base64.decode64(base_64_encoded_data)) }
         movie = FFMPEG::Movie.new("#{dir}/av.webm")
         movie.screenshot("./tmp/seo/screenshot_%d.jpg", { vframes: 1000, frame_rate: '12/1' }, validate: false)
       end
+
+      # ML job
+
       head :no_content
     end
 
