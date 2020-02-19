@@ -23,17 +23,3 @@ $ bundle
 $ rails s
 ```
 
-* Todo
-```
-1. docker를 이용한 환경구축
-2. 얼굴인식을 위한 ActiveJob추가
-3. 회원가입
-4. 메인페이지
-5. 등록페이지
-6. 얼굴인식페이지
-7. DB설계
-8. Admin mode
-9. OpenCV test
-10. ruby on python test
-11. 업로드된 영상을 다운로드하는 폴더구성
-```
