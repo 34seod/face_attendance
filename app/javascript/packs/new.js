@@ -78,5 +78,7 @@ function errorHandler(errors) {
     // 1. close modal
     $("[data-dismiss=modal]").trigger({ type: "click" });
     // 2. show error message
-    console.log(errors)
+    $("#name_error").text(errors.name || "")
+    $("#company_id_error").text(errors.company_id || "")
+    $("#nfc_id_error").text(errors.nfc_id || "")
 }

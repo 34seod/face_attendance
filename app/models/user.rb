@@ -14,9 +14,9 @@ class User < ApplicationRecord
   # Associations ----------------------------------------------------------------------------------
 
   # Validations -----------------------------------------------------------------------------------
-  validates :name,       presence: true
-  validates :company_id, presence: true, uniqueness: true
-  validates :nfc_id,     presence: true, uniqueness: true
+  validates :name,       presence: { message: I18n.t("error.required") }
+  validates :company_id, presence: { message: I18n.t("error.required") }, uniqueness: { message: I18n.t("error.uniq") }
+  validates :nfc_id,     presence: { message: I18n.t("error.required") }, uniqueness: { message: I18n.t("error.uniq") }
 
   # Scopes ----------------------------------------------------------------------------------------
 

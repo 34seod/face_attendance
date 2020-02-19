@@ -1,0 +1,4 @@
+kr:
+  error:
+    required: 필수 입력 사항입니다.
+    uniq: 이미 등록된 값입니다.
