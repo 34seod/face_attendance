@@ -2,19 +2,12 @@ import { RecordRTCPromisesHandler } from "recordrtc"
 
 // https://github.com/muaz-khan/RecordRTC
 document.addEventListener('DOMContentLoaded', () => {
-    // $("#modalBtn").click(function(){
-    //   $("#exampleModal").modal('show');
-    // });
-
     // Store a reference of the preview video element and a global reference to the recorder instance
-    var video = document.getElementById('my-preview');
+    var video = document.getElementById('preview');
     var recorder;
 
     // When the user clicks on start video recording
-    document.getElementById('btn-start-recording').addEventListener("click", function(){
-        // Disable start recording button
-        this.disabled = true;
-
+    document.getElementById('face-regist').addEventListener("click", function(){
         // Request access to the media devices
         navigator.mediaDevices.getUserMedia({
             audio: false,
@@ -29,9 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             video.muted = true;
 
             // Initialize the recorder
-            recorder = new RecordRTCPromisesHandler(stream, {
-                mimeType: 'video/webm',
-            });
+            recorder = new RecordRTCPromisesHandler(stream, { mimeType: 'video/webm' });
 
             // Start recording the video
             recorder.startRecording().then(function() {
@@ -42,44 +33,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // release stream on stopRecording
             recorder.stream = stream;
+        }).then(function() {
+            setTimeout(() => {
+                recorder.stopRecording().then(function() {
+                    console.info('stopRecording success');
 
-            // Enable stop recording button
-            document.getElementById('btn-stop-recording').disabled = false;
+                    // Retrieve recorded video as blob and display in the preview element
+                    let result = {}
+                    recorder.getBlob().then((re) => {
+                    }).then(() => {
+                      recorder.getDataURL().then((re) => {
+                        result.data = re
+                      }).then(() => {
+                        result.name = $("#name").val()
+                        result.company_id = $("#company_id").val()
+                        result.nfc_id = $("#nfc_id").val()
+                        sendToServer(result)
+                      })
+                    })
+
+                    recorder.stream.stop()
+                })
+            }, 6000)
         }).catch(function(error) {
             console.error("Cannot access media devices: ", error);
-        });
-    }, false);
-
-    // When the user clicks on Stop video recording
-    document.getElementById('btn-stop-recording').addEventListener("click", function(){
-        this.disabled = true;
-
-        recorder.stopRecording().then(function() {
-            console.info('stopRecording success');
-
-            // Retrieve recorded video as blob and display in the preview element
-            let result = {}
-            recorder.getBlob().then((re) => {
-              // result.blob = re
-            }).then(() => {
-              recorder.getDataURL().then((re) => {
-                result.data = re
-              }).then((re) => {
-                console.log(result)
-                // var formElement = document.getElementById("user-form");
-                // var formData = formElement.getFormData();
-                sendToServer(result)
-              })
-            })
-
-            // Stop the device streaming
-            recorder.stream.stop()
-
-            // Enable record button again !
-
-            document.getElementById('btn-start-recording').disabled = false;
-        }).catch(function(error) {
-            console.error('stopRecording failure', error);
         });
     }, false);
 })
@@ -91,7 +68,15 @@ function sendToServer(json) {
     url: "/save",
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
     data: json,
-    success: () => {console.log("saved")}
+    success: () => {console.log("saved")},
+    error: (res) => {errorHandler(res.responseJSON)}
   })
 }
 // https://jsfiddle.net/9b2e1p0t/2/
+
+function errorHandler(errors) {
+    // 1. close modal
+    $("[data-dismiss=modal]").trigger({ type: "click" });
+    // 2. show error message
+    console.log(errors)
+}
