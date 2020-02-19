@@ -6,7 +6,7 @@
 #  name       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  company_id :bigint
+#  company_id :bigint           not null
 #  nfc_id     :string           not null
 #
 
