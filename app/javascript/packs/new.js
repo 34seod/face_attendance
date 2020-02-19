@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     recorder.stream.stop()
                 })
-            }, 6000)
+            }, 10000)
         }).catch(function(error) {
             console.error("Cannot access media devices: ", error);
         });
