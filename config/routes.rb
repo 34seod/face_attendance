@@ -9,4 +9,11 @@ Rails.application.routes.draw do
     get 'new' => 'attendance#new'
     get 'check' => 'attendance#check'
   end
+
+  require 'sidekiq/web'
+  # sidekiq ダッシュボード
+  if Rails.env.development?
+    mount Sidekiq::Web => '/sidekiq'
+    mount LetterOpenerWeb::Engine, at: '/letter_opener'
+  end
 end

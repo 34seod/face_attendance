@@ -17,7 +17,8 @@ module Api
           end
 
           # ML job
-          # binding.pry
+          FaceTrainJob.perform_later(user.id)
+
           redirect_to root_url
         else
           render json: user.errors.messages, status: :unprocessable_entity
