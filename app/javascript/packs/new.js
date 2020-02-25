@@ -46,8 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         result.data = re
                       }).then(() => {
                         result.name = $("#name").val()
-                        result.company_id = $("#company_id").val()
-                        result.nfc_id = $("#nfc_id").val()
+                        result.email = $("#email").val()
                         sendToServer(result)
                       })
                     })
@@ -79,6 +78,5 @@ function errorHandler(errors) {
     $("[data-dismiss=modal]").trigger({ type: "click" });
     // 2. show error message
     $("#name_error").text(errors.name || "")
-    $("#company_id_error").text(errors.company_id || "")
-    $("#nfc_id_error").text(errors.nfc_id || "")
+    $("#email_error").text(errors.email || "")
 }

@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
     const video = document.querySelector('#videoElement')
-    const btn = document.querySelector('#btn1')
+    const btn = document.querySelector('#face-check')
     video.srcObject = stream
     btn.onclick = function() {
-      const take = setInterval(() => takeSnapshot(video), 150)
-      setTimeout(() => clearInterval(take), 4000)
+      takeSnapshot(video)
     }
   }).catch(function (err0r) {
     console.log(err0r)
@@ -34,10 +33,10 @@ function takeSnapshot(video) {
 function sendToServer(dataUrl) {
   $.ajax({
     type: "POST",
-    url: "/save",
+    url: "/check",
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-    data: {img: dataUrl},
-    success: () => {console.log("saved")}
+    data: {data: dataUrl},
+    success: (response) => {alert(`${response.name} (${response.accurate}%)`)}
   })
 }
 // https://jsfiddle.net/9b2e1p0t/2/

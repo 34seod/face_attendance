@@ -1,8 +1,12 @@
 <%= javascript_pack_tag 'check' %>
 
-<h1>出席</h1>
-<video autoplay="true" id="videoElement" width="640" height="480"></video>
-<button id="btn1">Start</button>
-<br>
-<br>
-<hr>
+<div class="check-form rounded">
+  <div class="border border-dark rounded p-4 m-4 check-form-inside">
+    <form id="user-form">
+      <video autoplay="true" id="videoElement" class="rounded" width="640" height="480"></video>
+      <button type="button" id="face-check" class="btn btn-primary">
+        얼굴인식
+      </button>
+    </form>
+  </div>
+</div>

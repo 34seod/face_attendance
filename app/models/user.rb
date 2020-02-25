@@ -3,20 +3,18 @@
 # Table name: users
 #
 #  id         :integer          not null, primary key
+#  email      :string           not null
 #  name       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  company_id :bigint           not null
-#  nfc_id     :string           not null
 #
 
 class User < ApplicationRecord
   # Associations ----------------------------------------------------------------------------------
 
   # Validations -----------------------------------------------------------------------------------
-  validates :name,       presence: { message: I18n.t("error.required") }
-  validates :company_id, presence: { message: I18n.t("error.required") }, uniqueness: { message: I18n.t("error.uniq") }
-  validates :nfc_id,     presence: { message: I18n.t("error.required") }, uniqueness: { message: I18n.t("error.uniq") }
+  validates :name,  presence: { message: I18n.t("error.required") }
+  validates :email, presence: { message: I18n.t("error.required") }, uniqueness: { message: I18n.t("error.uniq") }
 
   # Scopes ----------------------------------------------------------------------------------------
 

@@ -1,4 +1,6 @@
 kr:
+  notice:
+    email: 등록이 완료되면 이메일로 연락드리겠습니다.
   error:
     required: 필수 입력 사항입니다.
     uniq: 이미 등록된 값입니다.
