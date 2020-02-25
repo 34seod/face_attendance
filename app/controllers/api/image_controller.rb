@@ -55,6 +55,7 @@ module Api
     def get_max(result)
       object = result.split("\n").each_with_object({}) do |data, a|
         match = data.match(/(.+) \((.+)\%\)/)
+        next if match[1] == "basic"
         a[match[1]] = match[2].to_f
       end.max { |a, b| a[1] <=> b[1] }
     end

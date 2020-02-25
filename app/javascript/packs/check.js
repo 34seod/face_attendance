@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function takeSnapshot(video) {
-  // const img = document.createElement('img')
   let context
   const width = video.offsetWidth
   const height = video.offsetHeight
@@ -25,18 +24,14 @@ function takeSnapshot(video) {
   context.drawImage(video, 0, 0)
   const dataUrl = canvas.toDataURL('image/jpg')
   sendToServer(dataUrl)
-  // img.src = canvas.toDataURL('image/jpg')
-  // document.body.appendChild(img)
 }
 
-// https://stackoverflow.com/questions/7203304/warning-cant-verify-csrf-token-authenticity-rails
 function sendToServer(dataUrl) {
   $.ajax({
     type: "POST",
     url: "/check",
     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
     data: {data: dataUrl},
-    success: (response) => {alert(`${response.name} (${response.accurate}%)`)}
+    success: (res) => {alert(`${res.name} (${res.accurate}%)`)}
   })
 }
-// https://jsfiddle.net/9b2e1p0t/2/
