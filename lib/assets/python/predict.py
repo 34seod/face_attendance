@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import sys
 
-tf.app.flags.DEFINE_string("output_graph", "./workspace/users_graph.pb", "학습된 신경망이 저장된 위치")
-tf.app.flags.DEFINE_string("output_labels", "./workspace/users_labels.txt", "학습할 레이블 데이터 파일")
+tf.app.flags.DEFINE_string("output_graph", "lib/assets/python/workspace/users_graph.pb", "학습된 신경망이 저장된 위치")
+tf.app.flags.DEFINE_string("output_labels", "lib/assets/python/workspace/users_labels.txt", "학습할 레이블 데이터 파일")
 tf.app.flags.DEFINE_boolean("show_image", False, "이미지 추론 후 이미지를 보여줍니다")
 FLAGS = tf.app.flags.FLAGS
 

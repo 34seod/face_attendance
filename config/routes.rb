@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   scope module: :api do
-    post 'save' => 'save_image#save'
+    post 'save' => 'image#save'
+    post 'check' => 'image#check'
   end
 
   scope module: :gui do

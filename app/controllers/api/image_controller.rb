@@ -1,7 +1,7 @@
 module Api
-  class SaveImageController < ApplicationController
+  class ImageController < ApplicationController
 
-    # POST "/save"
+    # POST /save
     def save
       ApplicationRecord.transaction do
         # DB
@@ -12,8 +12,8 @@ module Api
           Dir.mktmpdir do |dir|
             File.open("#{dir}/video.webm", 'wb') { |f| f.write(Base64.decode64(base_64_encoded_data)) }
             movie = FFMPEG::Movie.new("#{dir}/video.webm")
-            FileUtils.mkdir_p("lib/assets/python/inception/workspace/users/#{user_params[:company_id]}")
-            movie.screenshot("lib/assets/python/inception/workspace/users/#{user_params[:company_id]}/#{Time.zone.now.strftime('%Y%m%d%H%M%S')}_%d.jpg", { vframes: 10000, frame_rate: 24/1, quality: 1 }, validate: false)
+            FileUtils.mkdir_p("lib/assets/python/workspace/users/#{user_params[:company_id]}")
+            movie.screenshot("lib/assets/python/workspace/users/#{user_params[:company_id]}/#{Time.zone.now.strftime('%Y%m%d%H%M%S')}_%d.jpg", { vframes: 10000, frame_rate: 24/1, quality: 1 }, validate: false)
           end
 
           # ML job
@@ -24,6 +24,17 @@ module Api
           render json: user.errors.messages, status: :unprocessable_entity
         end
       end
+    end
+
+    # POST /check
+    def check
+      binding.pry
+      # snapshot save
+
+      # predict
+      result = `python lib/assets/python/predict.py #{}`
+
+      render json: {}
     end
 
     private
