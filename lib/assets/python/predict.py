@@ -1,39 +1,46 @@
-# https://github.com/tensorflow/tensorflow/blob/c565660e008cf666c582668cb0d0937ca86e71fb/tensorflow/examples/image_retraining/retrain.py
-# python retrain.py --bottleneck_dir=./workspace/bottlenecks --model_dir=./workspace/inception --output_graph=./workspace/users_graph.pb --output_labels=./workspace/users_labels.txt --image_dir ./workspace/users --how_many_training_steps 1000
+import cv2
+import numpy as np
+from sys import argv, exit
+from os import listdir, mkdir
+from os.path import isdir, isfile, join
 
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import sys
+# 주요 파라메터
+MODEL_FOLDER = 'lib/assets/python/model'
+FACE_CLASSIFIER = cv2.CascadeClassifier('lib/assets/python/lib/haarcascade_frontalface_default.xml')
+# --------------------------------------------------------------------------------------------------
+def face_extractor(img):
+    #흑백처리
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #얼굴 찾기
+    faces = FACE_CLASSIFIER.detectMultiScale(gray, 1.3, 5)
+    #찾은 얼굴이 없으면 프로그램 종료
+    if faces is():
+        print("No Face")
+        exit()
+    #얼굴들이 있으면
+    for(x,y,w,h) in faces:
+        cropped_face = img[y:y+h, x:x+w]
+    #cropped_face 리턴
+    return cropped_face
+# --------------------------------------------------------------------------------------------------
 
-tf.app.flags.DEFINE_string("output_graph", "lib/assets/python/workspace/users_graph.pb", "학습된 신경망이 저장된 위치")
-tf.app.flags.DEFINE_string("output_labels", "lib/assets/python/workspace/users_labels.txt", "학습할 레이블 데이터 파일")
-tf.app.flags.DEFINE_boolean("show_image", False, "이미지 추론 후 이미지를 보여줍니다")
-FLAGS = tf.app.flags.FLAGS
+# 1. 이미지 불러오기
+test_img = cv2.imread(argv[1])
+face = cv2.resize(face_extractor(test_img),(200,200))
+face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
 
-def main(_):
-    labels = [line.rstrip() for line in tf.gfile.GFile(FLAGS.output_labels)]
+# 2. 이미지 체크
+result = []
+model = cv2.face.LBPHFaceRecognizer_create()
+model_files = [f for f in listdir(MODEL_FOLDER) if isfile(join(MODEL_FOLDER, f))]
 
-    with tf.gfile.FastGFile(FLAGS.output_graph, 'rb') as fp:
-        graph_def = tf.GraphDef()
-        graph_def.ParseFromString(fp.read())
-        tf.import_graph_def(graph_def, name='')
+for model_file in model_files:
+    model.read(join(MODEL_FOLDER, model_file))
+    predict = model.predict(face)
+    confidence = int(100*(1-(predict[1])/300))
+    user_id = model_file.split(".")[0]
+    result.append(f"{user_id} {confidence}")
+    if confidence == 100:
+        break
 
-    with tf.Session() as sess:
-        logits = sess.graph.get_tensor_by_name('final_result:0')
-        image = tf.gfile.FastGFile(sys.argv[1], 'rb').read()
-        prediction = sess.run(logits, {'DecodeJpeg/contents:0': image})
-
-    # print('=== 예측 결과 ===')
-    for i in range(len(labels)):
-        name = labels[i]
-        score = prediction[0][i]
-        print('%s (%.2f%%)' % (name, score * 100))
-
-    if FLAGS.show_image:
-        img = mpimg.imread(sys.argv[1])
-        plt.imshow(img)
-        plt.show()
-
-if __name__ == "__main__":
-    tf.app.run()
+print(result)

@@ -1,7 +1,3 @@
-workspace/inception/*
-workspace/bottlenecks/*
-workspace/users/*
-!workspace/users/basic/
-
-users_graph.pb
-users_labels.txt
+data
+training
+model
