@@ -22,6 +22,7 @@ $ brew install ffmpeg
 
 OpenCV
 $ pip install opencv-python==3.4.9.31
+$ pip install opencv-contrib-python
 
 $ bundle
 $ rails s
