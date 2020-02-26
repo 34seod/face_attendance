@@ -7,8 +7,9 @@
 ```
 Ruby：2.6.3
 Ruby on Rails：6.0.2
-~~Python：3.8~~
-~~Tensorflow：:1.15~~
+Python：3.8
+Tensorflow：:1.15
+opencv:3.4.9.31
 ```
 
 * install
@@ -18,6 +19,9 @@ $ sudo apt-get install ffmpeg
 
 MacOS
 $ brew install ffmpeg
+
+OpenCV
+$ pip install opencv-python==3.4.9.31
 
 $ bundle
 $ rails s
