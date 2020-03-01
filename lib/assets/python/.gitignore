@@ -1,6 +1,9 @@
 workspace/inception/*
 workspace/bottlenecks/*
 workspace/users/*
+workspace/data/*
+workspace/predict_data/*
+workspace/target/*
 !workspace/users/basic/
 
 users_graph.pb
