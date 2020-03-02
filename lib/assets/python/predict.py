@@ -2,10 +2,8 @@
 # python retrain.py --bottleneck_dir=./workspace/bottlenecks --model_dir=./workspace/inception --output_graph=./workspace/users_graph.pb --output_labels=./workspace/users_labels.txt --image_dir ./workspace/users --how_many_training_steps 1000
 
 import tensorflow as tf
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import sys
 import cv2
+from shutil import rmtree
 from os import listdir, mkdir
 from os.path import isdir, isfile, join
 
@@ -13,10 +11,13 @@ tf.app.flags.DEFINE_string("output_graph", "lib/assets/python/workspace/users_gr
 tf.app.flags.DEFINE_string("output_labels", "lib/assets/python/workspace/users_labels.txt", "학습할 레이블 데이터 파일")
 tf.app.flags.DEFINE_boolean("show_image", False, "이미지 추론 후 이미지를 보여줍니다")
 FLAGS = tf.app.flags.FLAGS
+PREDICT_DATA_FOLDER = 'lib/assets/python/workspace/predict_data'
+TARGET_FOLDER = 'lib/assets/python/workspace/target'
+FACE_CLASSIFIER = cv2.CascadeClassifier('lib/assets/python/workspace/haarcascade_frontalface_default.xml')
 
-def face_extractor(face_classifier, img):
+def face_extractor(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_classifier.detectMultiScale(gray, 1.3, 5)
+    faces = FACE_CLASSIFIER.detectMultiScale(gray, 1.3, 5)
     if faces is():
         return None
     for(x,y,w,h) in faces:
@@ -28,26 +29,25 @@ def make_folder_if_not_exist(path):
         mkdir(path)
     return path
 
-def get_image(face_classifier, folder_path):
-    target_folder = 'lib/assets/python/workspace/target'
-    make_folder_if_not_exist(target_folder)
+def get_image(folder_path):
+    make_folder_if_not_exist(TARGET_FOLDER)
     files = [f for f in listdir(folder_path) if isfile(join(folder_path, f))]
 
     for i, img_file in enumerate(files):
         image_path = join(folder_path, img_file)
         image = cv2.imread(image_path)
 
-        if face_extractor(face_classifier, image) is not None:
-            face = cv2.resize(face_extractor(face_classifier, image), (200, 200))
+        if face_extractor(image) is not None:
+            face = cv2.resize(face_extractor(image), (200, 200))
             face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-            cv2.imwrite(join(target_folder, f"{i}.jpg"), face)
-            return join(target_folder, f"{i}.jpg")
+            cv2.imwrite(join(TARGET_FOLDER, f"{i}.jpg"), face)
+            rmtree(PREDICT_DATA_FOLDER)
+            return join(TARGET_FOLDER, f"{i}.jpg")
         else:
             pass
 
 def main(_):
-    face_classifier = cv2.CascadeClassifier('lib/assets/python/workspace/haarcascade_frontalface_default.xml')
-    file_path = get_image(face_classifier, sys.argv[1])
+    file_path = get_image(PREDICT_DATA_FOLDER)
 
     labels = [line.rstrip() for line in tf.gfile.GFile(FLAGS.output_labels)]
 
@@ -61,16 +61,12 @@ def main(_):
         image = tf.gfile.FastGFile(file_path, 'rb').read()
         prediction = sess.run(logits, {'DecodeJpeg/contents:0': image})
 
-    # print('=== 예측 결과 ===')
     for i in range(len(labels)):
         name = labels[i]
         score = prediction[0][i]
         print('%s (%.2f%%)' % (name, score * 100))
 
-    if FLAGS.show_image:
-        img = mpimg.imread(file_path)
-        plt.imshow(img)
-        plt.show()
+    rmtree(TARGET_FOLDER)
 
 if __name__ == "__main__":
     tf.app.run()

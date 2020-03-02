@@ -38,7 +38,7 @@ module Api
       end
 
       # predict
-      result = `python lib/assets/python/predict.py lib/assets/python/workspace/predict_data`
+      result = `python lib/assets/python/predict.py`
       max = get_max(result)
       user = User.find(max[0])
       render json: {name: user.name, accurate: max[1]}
