@@ -9,7 +9,6 @@ from PIL import Image
 base_dir = 'lib/assets/python'
 MODEL_FOLDER = join(base_dir, 'model')
 DATA_FOLDER = join(base_dir, 'data')
-TRAINING_FOLDER = join(base_dir, 'training')
 FACE_CLASSIFIER = cv2.CascadeClassifier(join(base_dir, 'lib/haarcascade_frontalface_default.xml'))
 
 # --------------------------------------------------------------------------------------------------
@@ -50,8 +49,11 @@ make_folder_if_not_exist(MODEL_FOLDER)
 images, labels = get_images_and_labels("data")
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.train(images, np.array(labels))
+if isfile(join(MODEL_FOLDER, 'train.yml')):
+    recognizer.read(join(MODEL_FOLDER, 'train.yml'))
+    recognizer.update(images, np.array(labels))
+else:
+    recognizer.train(images, np.array(labels))
 recognizer.save(join(MODEL_FOLDER, 'train.yml'))
 
-# rmtree(TRAINING_FOLDER)
 # rmtree(DATA_FOLDER)

@@ -30,15 +30,16 @@ module Api
     # POST /check
     def check
       # snapshot save
-      file_path = "tmp/test"
-      file_name = "target.jpg"
-      FileUtils.mkdir_p(file_path)
-      File.open("#{file_path}/#{file_name}", 'wb') { |f| f.write(Base64.decode64(base_64_encoded_data)) }
+      Dir.mktmpdir do |dir|
+        File.open("#{dir}/video.webm", 'wb') { |f| f.write(Base64.decode64(base_64_encoded_data)) }
+        movie = FFMPEG::Movie.new("#{dir}/video.webm")
+        FileUtils.mkdir_p("lib/assets/python/detect")
+        movie.screenshot("lib/assets/python/detect/%d.jpg", { vframes: 10000, frame_rate: 24/1, quality: 1 }, validate: false)
+      end
 
       # predict
-      result = `python lib/assets/python/predict.py #{file_path}/#{file_name}`
+      result = eval(`python lib/assets/python/predict.py`)
 
-      result = get_object(result)
       if result.nil?
         render json: {name: "No Face", accurate: 0 }
       else
@@ -55,11 +56,6 @@ module Api
 
     def base_64_encoded_data
       params[:data].split(",").last
-    end
-
-    def get_object(result)
-      return if result == "No Face\n"
-      eval(result)
     end
   end
 end
