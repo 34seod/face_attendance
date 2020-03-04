@@ -38,12 +38,12 @@ module Api
       # predict
       result = `python lib/assets/python/predict.py #{file_path}/#{file_name}`
 
-      max = get_max(result)
-      if max.nil?
+      result = get_object(result)
+      if result.nil?
         render json: {name: "No Face", accurate: 0 }
       else
-        user = User.find(max[0])
-        render json: {name: user.name, accurate: max[1]}
+        user = User.find(result[0])
+        render json: {name: user.name, accurate: result[1]}
       end
     end
 
@@ -57,10 +57,9 @@ module Api
       params[:data].split(",").last
     end
 
-    def get_max(result)
+    def get_object(result)
       return if result == "No Face\n"
-      target = eval(result).max_by {|x| x.split(" ")[1] }
-      target.split(" ")
+      eval(result)
     end
   end
 end
