@@ -43,7 +43,7 @@ function takeSnapshot(recorder, stream) {
           })
         })
 
-        recorder.stream.stop()
+        // recorder.stream.stop()
     })
 }, 1500)
 }
