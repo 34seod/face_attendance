@@ -38,7 +38,7 @@ module Api
       end
 
       # predict
-      result = eval(`python lib/assets/python/predict.py`)
+      result = eval(`python3 lib/assets/python/predict.py`)
 
       if result.nil?
         render json: {name: "No Face", accurate: 0 }

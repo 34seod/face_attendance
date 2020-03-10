@@ -46,7 +46,7 @@ def get_images_and_labels(datapath):
 make_folder_if_not_exist(DATA_FOLDER)
 make_folder_if_not_exist(MODEL_FOLDER)
 
-images, labels = get_images_and_labels("data")
+images, labels = get_images_and_labels(DATA_FOLDER)
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 if isfile(join(MODEL_FOLDER, 'train.yml')):
@@ -56,4 +56,4 @@ else:
     recognizer.train(images, np.array(labels))
 recognizer.save(join(MODEL_FOLDER, 'train.yml'))
 
-# rmtree(DATA_FOLDER)
+rmtree(DATA_FOLDER)

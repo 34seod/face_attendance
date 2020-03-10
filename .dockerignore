@@ -1,0 +1,10 @@
+.ruby-version
+.env
+.bundle
+vendor
+
+log/*
+tmp/*
+.DS_Store
+.dockerignore
+dump.rdb
