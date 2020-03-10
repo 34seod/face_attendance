@@ -11,6 +11,7 @@ opencv: 3.4.9.31
 * install
 ```
 $ docker-compose build
+$ docker-compose run web yarn install
 $ docker-compose run web rails db:create db:migrate
 $ docker-compose up
 ```

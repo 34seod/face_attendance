@@ -11,9 +11,9 @@ ADD Gemfile ${APP_ROOT}/Gemfile
 ADD Gemfile.lock ${APP_ROOT}/Gemfile.lock
 RUN bundle check || bundle install
 
-COPY package.json ${APP_ROOT}/
-COPY yarn.lock ${APP_ROOT}/
-RUN yarn install --check-files
+# COPY package.json ${APP_ROOT}/
+# COPY yarn.lock ${APP_ROOT}/
+# RUN yarn install --check-files
 
 COPY . ${APP_ROOT}
 
