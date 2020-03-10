@@ -8,12 +8,28 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+  redis:
+    image: redis
+  # app:
+  #   build: .
+  #   volumes:
+  #     - bundle:/bundle
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && foreman start"
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
+    # command: bash -c "rm -f tmp/pids/server.pid && foreman start"
     volumes:
       - .:/usr/src/app
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - redis
+  worker:
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - redis
