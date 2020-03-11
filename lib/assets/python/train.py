@@ -46,14 +46,17 @@ def get_images_and_labels(datapath):
 make_folder_if_not_exist(DATA_FOLDER)
 make_folder_if_not_exist(MODEL_FOLDER)
 
-images, labels = get_images_and_labels(DATA_FOLDER)
+try:
+    images, labels = get_images_and_labels(DATA_FOLDER)
 
-recognizer = cv2.face.LBPHFaceRecognizer_create()
-if isfile(join(MODEL_FOLDER, 'train.yml')):
-    recognizer.read(join(MODEL_FOLDER, 'train.yml'))
-    recognizer.update(images, np.array(labels))
-else:
-    recognizer.train(images, np.array(labels))
-recognizer.save(join(MODEL_FOLDER, 'train.yml'))
-
-rmtree(DATA_FOLDER)
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    if isfile(join(MODEL_FOLDER, 'train.yml')):
+        recognizer.read(join(MODEL_FOLDER, 'train.yml'))
+        recognizer.update(images, np.array(labels))
+    else:
+        recognizer.train(images, np.array(labels))
+    recognizer.save(join(MODEL_FOLDER, 'train.yml'))
+except Exception as ex:
+    print("train error", ex)
+finally:
+    rmtree(DATA_FOLDER)
