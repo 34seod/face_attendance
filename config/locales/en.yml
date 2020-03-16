@@ -30,4 +30,8 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  notice:
+    email: We will send a e-mail if face training is done.
+  error:
+    required: This is required field.
+    uniq: Please insert another value.
