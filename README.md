@@ -29,6 +29,8 @@ $ docker-compose down
 ```
 ・ main: http://localhost:3000
 
+・ admin: http://localhost:3000/admin
+
 ・ email: http://localhost:3000/letter_opener
 
 ・ sidekiq: http://localhost:3000/sidekiq
