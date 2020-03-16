@@ -40,15 +40,20 @@ module Api
       # predict
       result = eval(`python3 lib/assets/python/predict.py`)
 
-      if result.nil?
-        render json: {name: "No Face", accurate: 0 }
+      if result.present? && user(result[0]).email == params[:email] && result[1] > 75
+        render json: {name: @user.name, accurate: result[1]}
+      elsif result.nil?
+        render json: {name: "Can't find registed Face", accurate: nil }
       else
-        user = User.find(result[0])
-        render json: {name: user.name, accurate: result[1]}
+        render json: {name: "Unregisted face or worng email", accurate: nil }
       end
     end
 
     private
+
+    def user(result)
+      @user = User.find(result)
+    end
 
     def user_params
       params.permit(:name, :email)

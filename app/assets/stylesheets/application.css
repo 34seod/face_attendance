@@ -24,7 +24,7 @@ body {
   height: 100%;
   background-color: #68676786;
   position: absolute;
-  z-index: 1000;
+  z-index: 10000;
 }
 
 .fingerprint-spinner, .fingerprint-spinner * {
