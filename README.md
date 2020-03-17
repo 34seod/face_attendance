@@ -15,11 +15,6 @@ $ docker-compose run web yarn install
 $ docker-compose run web rails db:create db:migrate
 ```
 
-binding.pry
-```
-$ docker attach face_attendance_web_1
-```
-
 * server start
 ```
 $ docker-compose up
@@ -28,6 +23,11 @@ $ docker-compose up
 * server down
 ```
 $ docker-compose down
+```
+
+* binding.pry
+```
+$ docker attach face_attendance_web_1
 ```
 
 * URL
